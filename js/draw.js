@@ -29,9 +29,8 @@ function drawCelestialBody(celestialBody){
         drawCelestialBody(satellite);
     });
     context.restore();
-    animate();
 }
-
+animate(0);
 function drawSolarSystem(){
     context.save();
     context.translate(canvas.width / 2, canvas.height / 2);
@@ -39,19 +38,19 @@ function drawSolarSystem(){
     context.restore();
 }
 
-function drawOrbit(celestialBody)
-{
+function drawOrbit(celestialBody){
     context.beginPath();
     context.arc(0, 0, celestialBody.distance, 0, 2 * Math.PI);
     context.strokeStyle = "#333333";
     context.stroke();
 }
 
-function animate()
+function animate(lastUpdateTime)
 {
-    setInterval(() => {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        drawSolarSystem();
-        solarSystem.sun.update(50);
-    }, 50);
+    const now = performance.now();
+    const elapsedTime = lastUpdateTime === 0 ? 0 : now - lastUpdateTime;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    drawSolarSystem();
+    solarSystem.sun.update(elapsedTime);
+    requestAnimationFrame(() => { animate(now) });
 }
