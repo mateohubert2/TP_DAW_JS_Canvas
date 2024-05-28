@@ -18,6 +18,7 @@ function drawSquare(){
 
 function drawCelestialBody(celestialBody){
     context.save();
+    context.rotate(celestialBody.orbitalAngle);
     context.translate(celestialBody.distance, 0);
     context.beginPath();
     context.arc(0, 0, celestialBody.radius, 0, 2 * Math.PI);
@@ -28,6 +29,7 @@ function drawCelestialBody(celestialBody){
         drawCelestialBody(satellite);
     });
     context.restore();
+    animate();
 }
 
 function drawSolarSystem(){
@@ -43,4 +45,13 @@ function drawOrbit(celestialBody)
     context.arc(0, 0, celestialBody.distance, 0, 2 * Math.PI);
     context.strokeStyle = "#333333";
     context.stroke();
+}
+
+function animate()
+{
+    setInterval(() => {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawSolarSystem();
+        solarSystem.sun.update(50);
+    }, 50);
 }
