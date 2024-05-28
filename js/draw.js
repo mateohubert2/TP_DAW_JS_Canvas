@@ -6,7 +6,7 @@ function resize()
 {
 canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
-drawCelestialBody(solarSystem.sun);
+drawSolarSystem();
 }
 window.addEventListener("resize", () => {
     resize();
@@ -17,8 +17,30 @@ function drawSquare(){
 }
 
 function drawCelestialBody(celestialBody){
+    context.save();
+    context.translate(celestialBody.distance, 0);
     context.beginPath();
-    context.arc(canvas.width / 2, canvas.height / 2, celestialBody.radius, 0, 2 * Math.PI);
+    context.arc(0, 0, celestialBody.radius, 0, 2 * Math.PI);
     context.fillStyle = celestialBody.color;
     context.fill();
+    celestialBody.satellites.forEach((satellite) => {
+        drawOrbit(satellite);
+        drawCelestialBody(satellite);
+    });
+    context.restore();
+}
+
+function drawSolarSystem(){
+    context.save();
+    context.translate(canvas.width / 2, canvas.height / 2);
+    drawCelestialBody(solarSystem.sun);
+    context.restore();
+}
+
+function drawOrbit(celestialBody)
+{
+    context.beginPath();
+    context.arc(0, 0, celestialBody.distance, 0, 2 * Math.PI);
+    context.strokeStyle = "#333333";
+    context.stroke();
 }
